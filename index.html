@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peta Perizinan & Invenstasi</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <!-- MAPBOX -->
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.css"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css"
+    />
+    <link rel="icon" href="img/favicon.ico" />
+  </head>
+  <body>
+    <div class="container-map">
+      <div id="map" class="wm-map">
+        <div class="wm-cards wm-cards-left">
+          <div class="card" style="pointer-events: all">
+            <div
+              class="card-header p-0"
+              data-toggle="collapse"
+              href="#collapseTop"
+              role="button"
+            >
+              <div class="text-center pt-2 pb-2">
+                <img
+                  src="img/Sumedang.png"
+                  width="55px"
+                  style="margin-left: -20px; margin-right: 10px"
+                />
+                <span class="txtHeadNav" data-t
+                  >Peta Perizinan dan Invenstasi</span
+                >
+                <!-- <span class="txtHeadNav2" data-t>front.a.subapptitle</span> -->
+              </div>
+            </div>
+            <div class="card-body p-2 collapse show" id="collapseTop">
+              <!-- <label class="font-weight-bold">Pencarian</label> -->
+              <input
+                type="text"
+                class="wm-search form-control is-editable is-blank"
+                id="cari_wilayah"
+                placeholder="Cari wilayah disini..."
+              />
+              <div class="wm-search__dropdown-container">
+                <div class="wm-search-dropdown">
+                  <ul class="wm-search__dropdown" role="listbox"></ul>
+                </div>
+              </div>
+              <div class="form-group w-100 mt-3">
+                <span class="lblLayer" style="display: none" data-t
+                  >front.a.layer_lbl :</span
+                >
+                <div id="menus" style="display: none"></div>
+              </div>
+              <div
+                class="form-group w-100 mt-3 mb-0"
+                id="radiusSlide"
+                style="display: none"
+              >
+                <span class="lblLayer"
+                  ><span data-t>front.a.radius</span> <b id="radiusVal"></b
+                ></span>
+                <input
+                  type="range"
+                  class="form-control-range"
+                  id="radiusRange"
+                  min="500"
+                  max="3000"
+                  step="500"
+                  value="1000"
+                />
+              </div>
+              <div class="text-right">
+                <a href="/" title="Menggunakan Bahasa Indonesia">Bahasa</a> |
+                <a href="en" title="Menggunakan Bahasa Inggris">English</a>
+              </div>
+            </div>
+            <div
+              class="openCollapse"
+              data-toggle="collapse"
+              href="#collapseTop"
+              role="button"
+            >
+              <i class="las la-angle-double-down"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.2/mapbox-gl-draw.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <script src="js/script.js"></script>
+</html>
