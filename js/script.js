@@ -17,7 +17,7 @@ const draw = new MapboxDraw({
 map.on("load", () => {
   map.addSource("wilayah", {
     type: "geojson",
-    data: "http://103.146.202.108:7000/wilayah",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/wilayah",
   });
 
   map.addLayer({
