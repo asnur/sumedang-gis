@@ -15,6 +15,7 @@ const draw = new MapboxDraw({
 });
 
 map.on("load", () => {
+  // Layer Wilayah
   map.addSource("wilayah", {
     type: "geojson",
     data: "https://jakpintas.dpmptsp-dki.com:7000/wilayah",
@@ -30,10 +31,56 @@ map.on("load", () => {
       "fill-outline-color": "red",
     },
     layout: {
-      visibility: "visible",
+      visibility: "none",
+    },
+  });
+
+  //Layer Zonasi
+  map.addSource("zonasi", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/zonasi",
+  });
+
+  map.addLayer({
+    id: "zonasi_fill",
+    type: "fill",
+    source: "zonasi",
+    paint: {
+      "fill-color": ["get", "fill"],
+      "fill-opacity": 1,
+    },
+    layout: {
+      visibility: "none",
     },
   });
 });
+
+const showLayer = (layer) => {
+  map.setLayoutProperty(layer, "visibility", "visible");
+};
+
+const hideLayer = (layer) => {
+  map.setLayoutProperty(layer, "visibility", "none");
+};
+
+const onOffLayer = () => {
+  $("#wilayah_fill").change(() => {
+    if ($("#wilayah_fill").is(":checked")) {
+      showLayer("wilayah_fill");
+    } else {
+      hideLayer("wilayah_fill");
+    }
+  });
+  $("#zonasi_fill").change(() => {
+    if ($("#zonasi_fill").is(":checked")) {
+      showLayer("zonasi_fill");
+    } else {
+      hideLayer("zonasi_fill");
+    }
+  });
+};
+
+onOffLayer();
 
 map.addControl(new mapboxgl.NavigationControl());
 
