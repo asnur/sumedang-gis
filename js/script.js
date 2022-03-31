@@ -4,8 +4,7 @@ const map = new mapboxgl.Map({
   container: "map",
   style: "mapbox://styles/perare/ckpntmyyg0tez17o6yzz9b0om",
   center: [107.9069417, -6.8122635],
-  zoom: 15,
-  // worldCopyJump: true,
+  zoom: 10,
 });
 const draw = new MapboxDraw({
   displayControlsDefault: false,
@@ -14,6 +13,37 @@ const draw = new MapboxDraw({
     trash: true,
   },
 });
+const popup = new mapboxgl.Popup({
+  closeButton: false,
+  closeOnClick: false,
+});
+
+const ScrapeData = (uuid, ot) => {
+  $.ajax({
+    url: `https://my.perare.io/crud/api/plot/by-uuid/${uuid}?expand=ownership_type_id,area,nib,address,listings,photos,uuid,visitsCounter,todayVisitsCounter`,
+    type: "GET",
+    dataType: "json",
+    success: (data) => {
+      let coordinate = [data.coordinates];
+      $.ajax({
+        url: "http://localhost:7000/scrape",
+        type: "POST",
+        data: {
+          uuid: uuid,
+          ot: ot,
+          coordinates: JSON.stringify({
+            type: "MultiPolygon",
+            coordinates: coordinate,
+          }),
+          luas: data.area,
+        },
+        success: (e) => {
+          console.log(e);
+        },
+      });
+    },
+  });
+};
 
 map.on("load", () => {
   // Layer Wilayah
@@ -30,6 +60,63 @@ map.on("load", () => {
       "fill-color": "#f1c40f",
       "fill-opacity": 0.7,
       "fill-outline-color": "red",
+    },
+    layout: {
+      visibility: "none",
+    },
+  });
+
+  //Layer Jalan
+  map.addSource("jalan", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/jalan",
+  });
+
+  map.addLayer({
+    id: "jalan_fill",
+    type: "fill",
+    source: "jalan",
+    paint: {
+      "fill-color": "#e74c3c",
+    },
+    layout: {
+      visibility: "none",
+    },
+  });
+
+  //Layer Perairan
+  map.addSource("perairan", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/perairan",
+  });
+
+  map.addLayer({
+    id: "perairan_fill",
+    type: "fill",
+    source: "perairan",
+    paint: {
+      "fill-color": "#3498db",
+    },
+    layout: {
+      visibility: "none",
+    },
+  });
+
+  //Layer Toponomi
+  map.addSource("toponomi", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/toponimi",
+  });
+
+  map.addLayer({
+    id: "toponomi_dot",
+    type: "circle",
+    source: "toponomi",
+    paint: {
+      "circle-color": "#4264fb",
+      "circle-stroke-color": "#ffff00",
+      "circle-stroke-width": 1,
+      "circle-radius": 4,
     },
     layout: {
       visibility: "none",
@@ -136,6 +223,8 @@ map.on("load", () => {
       visibility: "none",
     },
   });
+  // setTimeout(() => {
+  // });
 });
 
 const showLayer = (layer) => {
@@ -170,13 +259,70 @@ const onOffLayer = () => {
       hideLayer("zonasi_fill");
     }
   });
+  $("#jalan_fill").change(() => {
+    if ($("#jalan_fill").is(":checked")) {
+      showLayer("jalan_fill");
+    } else {
+      hideLayer("jalan_fill");
+    }
+  });
+  $("#perairan_fill").change(() => {
+    if ($("#perairan_fill").is(":checked")) {
+      showLayer("perairan_fill");
+    } else {
+      hideLayer("perairan_fill");
+    }
+  });
+  $("#toponomi_dot").change(() => {
+    if ($("#toponomi_dot").is(":checked")) {
+      showLayer("toponomi_dot");
+    } else {
+      hideLayer("toponomi_dot");
+    }
+  });
 };
+
+map.on("mouseenter", "toponomi_dot", (e) => {
+  map.getCanvas().style.cursor = "pointer";
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  let html = `
+    <div class="card">
+      <div class="card-body">
+        <div style="line-height: 1.2;">
+          <span class="d-block"><b>Jenis</b> : ${e.features[0].properties.Jenis}</span>
+          <span class="d-block"><b>Toponimi</b> : ${e.features[0].properties.Toponimi}</span>
+        </div>
+        </div>
+    </div>
+  `;
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+  popup.setLngLat(coordinates).setHTML(html).addTo(map);
+});
+
+map.on("mouseleave", "toponomi_dot", () => {
+  map.getCanvas().style.cursor = "";
+  popup.remove();
+});
 
 onOffLayer();
 
 map.addControl(new mapboxgl.NavigationControl());
 
 map.addControl(draw);
+
+// map.on("dragend", function (e) {
+//   if (map.getSource("persil") && map.isSourceLoaded("persil")) {
+//     var features = map.querySourceFeatures("persil", {
+//       sourceLayer: "test",
+//     });
+//     features.forEach((data) => {
+//       // ScrapeData(data.properties.uuid, data.properties.ot);
+//       console.log("Proses");
+//     });
+//   }
+// });
 
 map.on("mouseenter", "polygons-fill", (e) => {
   // console.log(e);
@@ -194,3 +340,5 @@ $(".mapboxgl-ctrl.mapboxgl-ctrl-attrib, a.mapboxgl-ctrl-logo").css(
   "visibility",
   "hidden"
 );
+
+// ScrapeData("616bc605-062f-5fba-99a1-f1514760d2d7", "1");
