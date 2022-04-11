@@ -341,8 +341,8 @@ map.on("mouseenter", "poi_dot", (e) => {
     <div class="card">
       <div class="card-body">
         <div style="line-height: 1.2;">
+        <span class="d-block">${e.features[0].properties.Jenis}</span>
           <span class="d-block">${e.features[0].properties.Nama}</span>
-          <span class="d-block">${e.features[0].properties.Jenis}</span>
         </div>
         </div>
     </div>
