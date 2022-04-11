@@ -113,6 +113,27 @@ map.on("load", () => {
     type: "circle",
     source: "toponomi",
     paint: {
+      "circle-color": "#e74c3c",
+      "circle-stroke-color": "#ffff00",
+      "circle-stroke-width": 1,
+      "circle-radius": 4,
+    },
+    layout: {
+      visibility: "none",
+    },
+  });
+
+  //Layer POI
+  map.addSource("poi", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/poi",
+  });
+
+  map.addLayer({
+    id: "poi_dot",
+    type: "circle",
+    source: "poi",
+    paint: {
       "circle-color": "#4264fb",
       "circle-stroke-color": "#ffff00",
       "circle-stroke-width": 1,
@@ -280,6 +301,13 @@ const onOffLayer = () => {
       hideLayer("toponomi_dot");
     }
   });
+  $("#poi_dot").change(() => {
+    if ($("#poi_dot").is(":checked")) {
+      showLayer("poi_dot");
+    } else {
+      hideLayer("poi_dot");
+    }
+  });
 };
 
 map.on("mouseenter", "toponomi_dot", (e) => {
@@ -302,6 +330,30 @@ map.on("mouseenter", "toponomi_dot", (e) => {
 });
 
 map.on("mouseleave", "toponomi_dot", () => {
+  map.getCanvas().style.cursor = "";
+  popup.remove();
+});
+
+map.on("mouseenter", "poi_dot", (e) => {
+  map.getCanvas().style.cursor = "pointer";
+  const coordinates = e.features[0].geometry.coordinates.slice();
+  let html = `
+    <div class="card">
+      <div class="card-body">
+        <div style="line-height: 1.2;">
+          <span class="d-block"><b>Nama</b> : ${e.features[0].properties.Nama}</span>
+          <span class="d-block"><b>Alamat</b> : ${e.features[0].properties.Alamat}</span>
+        </div>
+        </div>
+    </div>
+  `;
+  while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+  }
+  popup.setLngLat(coordinates).setHTML(html).addTo(map);
+});
+
+map.on("mouseleave", "poi_dot", () => {
   map.getCanvas().style.cursor = "";
   popup.remove();
 });
