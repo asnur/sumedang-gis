@@ -74,10 +74,10 @@ map.on("load", () => {
 
   map.addLayer({
     id: "jalan_fill",
-    type: "fill",
+    type: "line",
     source: "jalan",
     paint: {
-      "fill-color": "#e74c3c",
+      "line-color": "#ff0000",
     },
     layout: {
       visibility: "none",
