@@ -6,12 +6,12 @@ const map = new mapboxgl.Map({
   center: [107.9069417, -6.8122635],
   zoom: 10,
 });
-const draw = new MapboxDraw({
-  displayControlsDefault: false,
-  controls: {
-    polygon: true,
-  },
-});
+// const draw = new MapboxDraw({
+//   displayControlsDefault: false,
+//   controls: {
+//     polygon: true,
+//   },
+// });
 const popup = new mapboxgl.Popup({
   closeButton: false,
   closeOnClick: false,
@@ -361,7 +361,7 @@ onOffLayer();
 
 map.addControl(new mapboxgl.NavigationControl());
 
-map.addControl(draw);
+// map.addControl(draw);
 
 // map.on("dragend", function (e) {
 //   if (map.getSource("persil") && map.isSourceLoaded("persil")) {
