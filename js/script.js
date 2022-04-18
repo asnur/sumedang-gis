@@ -10,7 +10,6 @@ const draw = new MapboxDraw({
   displayControlsDefault: false,
   controls: {
     polygon: true,
-    trash: true,
   },
 });
 const popup = new mapboxgl.Popup({
