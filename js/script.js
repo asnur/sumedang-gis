@@ -243,6 +243,25 @@ map.on("load", () => {
       visibility: "none",
     },
   });
+
+  //Layer Prediksi
+  map.addSource("prediksi", {
+    type: "geojson",
+    data: "https://jakpintas.dpmptsp-dki.com:7000/prediksi",
+  });
+
+  map.addLayer({
+    id: "prediksi_fill",
+    type: "fill",
+    source: "prediksi",
+    paint: {
+      "fill-color": ["get", "fill"],
+      "fill-opacity": 1,
+    },
+    layout: {
+      visibility: "none",
+    },
+  });
   // setTimeout(() => {
   // });
 });
@@ -305,6 +324,13 @@ const onOffLayer = () => {
       showLayer("poi_dot");
     } else {
       hideLayer("poi_dot");
+    }
+  });
+  $("#prediksi_fill").change(() => {
+    if ($("#prediksi_fill").is(":checked")) {
+      showLayer("prediksi_fill");
+    } else {
+      hideLayer("prediksi_fill");
     }
   });
 };
